@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"spells/cmd/models"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -23,4 +25,19 @@ var Storage = []models.Spell{
 
 func GetAllSpells(c echo.Context) error {
 	return c.JSON(http.StatusOK, Storage)
+}
+
+func GetSpell(c echo.Context) error {
+	id, err := strconv.Atoi(c.Param("spellId"))
+	if err != nil {
+		return c.String(http.StatusBadRequest, "Invalid Id")
+	}
+
+	for _, spell := range Storage {
+		if spell.ID == id {
+			return c.JSON(http.StatusOK, spell)
+		}
+	}
+
+	return c.String(http.StatusNotFound, fmt.Sprintf("The spell with ID %d was not found", id))
 }
