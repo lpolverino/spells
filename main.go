@@ -16,5 +16,7 @@ func main() {
 	e.GET("/spells", handlers.GetAllSpells)
 	e.GET("/spells/:spellId", handlers.GetSpell)
 	e.POST("/spells", handlers.CreateSpell)
+	e.PUT("/spells/:spellId", handlers.UpdateSpell)
+	e.DELETE("/spells/:spellID", handlers.DeleteSpell)
 	e.Logger.Fatal(e.Start(":8080"))
 }
