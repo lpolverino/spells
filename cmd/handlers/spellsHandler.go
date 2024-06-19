@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"fmt"
+	"log"
+	"math/rand"
 	"net/http"
 	"spells/cmd/models"
 	"strconv"
@@ -40,4 +42,16 @@ func GetSpell(c echo.Context) error {
 	}
 
 	return c.String(http.StatusNotFound, fmt.Sprintf("The spell with ID %d was not found", id))
+}
+
+func CreateSpell(c echo.Context) error {
+	newSpell := models.Spell{ID: rand.Intn(10000)}
+	err := c.Bind(&newSpell)
+	log.Printf("%+v", newSpell)
+	Storage = append(Storage, newSpell)
+	if err != nil {
+		log.Printf("The was an error in the body %v", err)
+		return c.String(http.StatusBadRequest, "Bad spell")
+	}
+	return c.String(http.StatusCreated, fmt.Sprintf("the Spell %d was created", newSpell.ID))
 }
